@@ -51,8 +51,8 @@ import LoginForm from '@/components/LoginForm.vue'
 }
 
 .login-card{
-  width:min(1100px,90vw);
-  height:540px;
+  width:min(900px,85vw);
+  height:440px;
 
   display:flex;
 
@@ -73,7 +73,6 @@ import LoginForm from '@/components/LoginForm.vue'
     0 0 0 1px rgba(255,255,255,.03),
     0 15px 40px rgba(0,0,0,.45);
 }
-/* SOL TARAF */
 
 .brand-side{
   flex:1;
@@ -114,7 +113,7 @@ import LoginForm from '@/components/LoginForm.vue'
 .overlay-content h1{
   font-size:42px;
   font-weight:700;
-  margin-bottom:18px;
+  margin-bottom:10px;
 }
 
 .overlay-content p{
@@ -125,7 +124,6 @@ import LoginForm from '@/components/LoginForm.vue'
   color:#dbe4ff;
 }
 
-/* SAĞ TARAF */
 
 .form-side{
   flex:1;
@@ -133,7 +131,7 @@ import LoginForm from '@/components/LoginForm.vue'
   display:flex;
   align-items:center;
 
-  padding:60px;
+  padding:30px;
 
   background:transparent;
 }
@@ -144,7 +142,7 @@ import LoginForm from '@/components/LoginForm.vue'
 }
 
 .form-wrapper h2{
-  font-size:42px;
+  font-size:36px;
   color:white;
   margin-bottom:12px;
 }
@@ -152,13 +150,13 @@ import LoginForm from '@/components/LoginForm.vue'
 .subtitle{
   display:block;
   color:#cbd5e1;
-  margin-bottom:50px;
+  margin-bottom:30px;
 }
 
 :deep(.login-form){
   display:flex;
   flex-direction:column;
-  gap:22px;
+  gap:16px;
 }
 
 :deep(label){
@@ -169,7 +167,7 @@ import LoginForm from '@/components/LoginForm.vue'
 
 :deep(input){
   width:100%;
-  height:52px;
+  height:46px;
 
   background:#13203f;
 
@@ -184,7 +182,7 @@ import LoginForm from '@/components/LoginForm.vue'
 
 :deep(.login-btn){
   width:100%;
-  height:52px;
+  height:46px;
 
   border:none;
   border-radius:12px;
