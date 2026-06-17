@@ -21,27 +21,25 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { authService } from '../services/authService'
+import { useAuthStore } from '../stores/authStore'
 
 const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const loading = ref(false)
 const router = useRouter()
+const authStore = useAuthStore()
 
-const handleLogin = () => {
+const handleLogin = async () => { 
   errorMessage.value = ''
   loading.value = true
 
-  const result = authService.login(email.value, password.value)
+  await authStore.login(email.value, password.value)
 
-  if (result.success) {
-    // Token'ı kaydet
-    localStorage.setItem('token', result.token)
-    // Ana sayfaya yönlendir
-    router.push('/')
+  if (authStore.isAuthenticated) {
+    router.push('/')  // ← başarılı → ana sayfa
   } else {
-    errorMessage.value = result.message
+    errorMessage.value = 'Invalid email or password'
   }
 
   loading.value = false
