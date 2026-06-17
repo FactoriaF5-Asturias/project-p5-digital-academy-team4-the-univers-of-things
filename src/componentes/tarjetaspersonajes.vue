@@ -1,7 +1,11 @@
 <template>
   <article>
-    <img src="" alt="personaje">
-    <h3>Nombre personaje</h3>
+    <img
+      :src="personaje.imageUrl"
+      :alt="personaje.name"
+    >
+
+    <h3>{{ personaje.name }}</h3>
   </article>
 </template>
 <script setup>
