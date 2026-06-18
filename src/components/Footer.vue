@@ -1,17 +1,16 @@
 <script setup>
-import logo from '../assets/logo.png'
-import { Instagram, Twitter } from 'lucide-vue-next'
+import { Instagram } from 'lucide-vue-next'
 </script>
 
 <template>
   <footer class="footer">
     <div class="footer__container">
       <div class="footer__brand">
-        <img :src="logo" alt="Logo Disney" class="footer__logo" />
+        <span class="footer__logo-text">CineMagic</span>
       </div>
 
       <p class="footer__copyright">
-        © 2026 Disney. Todos los derechos reservados.
+        © 2026 CineMagic. Todos los derechos reservados.
       </p>
 
       <nav class="footer__social" aria-label="Redes sociales">
@@ -20,7 +19,7 @@ import { Instagram, Twitter } from 'lucide-vue-next'
         </a>
 
         <a href="#" target="_blank" rel="noopener noreferrer" aria-label="X">
-          <Twitter />
+          <span class="footer__x-icon">𝕏</span>
         </a>
       </nav>
     </div>
@@ -52,10 +51,11 @@ import { Instagram, Twitter } from 'lucide-vue-next'
   justify-content: flex-start;
 }
 
-.footer__logo {
-  width: 180px;
-  height: auto;
-  display: block;
+.footer__logo-text {
+  font-size: 2rem;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  color: #cbd5e1;
 }
 
 .footer__copyright {
@@ -79,6 +79,7 @@ import { Instagram, Twitter } from 'lucide-vue-next'
 .footer__social a {
   color: #cbd5e1;
   transition: color 0.2s ease;
+  text-decoration: none;
 }
 
 .footer__social a:hover {
@@ -88,6 +89,13 @@ import { Instagram, Twitter } from 'lucide-vue-next'
 .footer__social svg {
   width: 22px;
   height: 22px;
+}
+
+.footer__x-icon {
+  display: inline-block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 @media (max-width: 640px) {
@@ -106,8 +114,8 @@ import { Instagram, Twitter } from 'lucide-vue-next'
     justify-content: center;
   }
 
-  .footer__logo {
-    width: 160px;
+  .footer__logo-text {
+    font-size: 1.6rem;
   }
 
   .footer__copyright {
