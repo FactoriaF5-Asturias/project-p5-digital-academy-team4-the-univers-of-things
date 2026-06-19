@@ -2,7 +2,7 @@
   <section
     class="relative h-[500px] overflow-hidden rounded-3xl mb-12"
   >
-    <div class="herocontent">
+    <div class="hero-content">
       <h2>Descubre la magia de cada personaje</h2>
 
       <p>
