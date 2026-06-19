@@ -4,15 +4,12 @@
       <label>Email Address</label>
       <input v-model="email" type="email" placeholder="name@example.com" />
     </div>
-
     <div class="input-group">
       <label>Password</label>
       <input v-model="password" type="password" placeholder="••••••••" />
     </div>
 
-    <p v-if="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </p>
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
 
     <button type="submit" class="login-btn" :disabled="loading">
       {{ loading ? 'Logging in...' : 'Log In →' }}
@@ -29,32 +26,21 @@ const email = ref('')
 const password = ref('')
 const errorMessage = ref('')
 const loading = ref(false)
-
 const router = useRouter()
 const authStore = useAuthStore()
 
-const handleLogin = async () => {
+const handleLogin = async () => { 
   errorMessage.value = ''
   loading.value = true
 
-  try {
-    const success = await authStore.login(
-      email.value,
-      password.value
-    )
+  await authStore.login(email.value, password.value)
 
-    console.log('success:', success)
-
-    if (success) {
-      await router.push('/admin')
-    } else {
-      errorMessage.value = 'Invalid email or password'
-    }
-  } catch (error) {
-    console.error(error)
-    errorMessage.value = 'Error al iniciar sesión'
-  } finally {
-    loading.value = false
+  if (authStore.isAuthenticated) {
+    router.push('/') 
+  } else {
+    errorMessage.value = 'Invalid email or password'
   }
+
+  loading.value = false
 }
 </script>
