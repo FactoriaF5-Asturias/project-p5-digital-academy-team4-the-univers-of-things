@@ -27,6 +27,16 @@ const router = createRouter({
         role: 'admin',
         hideHeader: true
       }
+    },
+
+    {
+      path: '/user',
+      name: 'user-dashboard',
+      component: () => import('../views/UserDashboardView.vue'),
+      meta: {
+        requiresAuth: true,
+        hideHeader: true
+      }
     }
   ]
 })
