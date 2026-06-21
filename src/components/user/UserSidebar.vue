@@ -40,9 +40,10 @@
 .user-sidebar {
   width: 210px;
   min-height: 100vh;
+  height: 100%;
   background-color: #172133;
   color: white;
-  padding: 20px 16px;
+  padding: 12px 16px 16px;
   display: flex;
   flex-direction: column;
 }
