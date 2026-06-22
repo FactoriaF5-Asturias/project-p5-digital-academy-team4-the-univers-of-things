@@ -1,20 +1,20 @@
 <script setup>
+import { computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import HeaderPublic from '@/components/layout/HeaderPublic.vue'
 import Footer from './components/Footer.vue'
 
 const route = useRoute()
 
-// El Header solo se oculta en Admin (definido en meta: { hideHeader: true })
-const shouldHideHeader = () => route.meta.hideHeader
-
-// Permitimos que el Footer se muestre SIEMPRE, 
-// o si prefieres, ocúltalo solo si fuera necesario.
+// Esta propiedad computada verifica toda la jerarquía de la ruta
+const shouldHideHeader = computed(() => {
+  return route.matched.some(record => record.meta.hideHeader)
+})
 </script>
 
 <template>
   <div class="app">
-    <HeaderPublic v-if="!shouldHideHeader()" />
+    <HeaderPublic v-if="!shouldHideHeader" />
 
     <main class="app__content">
       <RouterView />

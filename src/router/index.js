@@ -10,12 +10,13 @@ const router = createRouter({
     {
       path: '/admin',
       component: () => import('../views/AdminDashboardView.vue'),
-      meta: { requiresAuth: true, hideHeader: true }, // Definido aquí
+      // Al ponerlo aquí, todos los hijos lo heredan
+      meta: { requiresAuth: true, hideHeader: true }, 
       children: [
         {
-          path: '',
+          path: '', 
           name: 'admin-dashboard',
-          component: () => import('../views/AdminDashboardView.vue')
+          component: () => import('../views/DashboardHome.vue')
         },
         {
           path: 'users',
