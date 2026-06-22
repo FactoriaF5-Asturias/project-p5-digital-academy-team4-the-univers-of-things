@@ -27,20 +27,31 @@
         <div class="user-sidebar__avatar">A</div>
         <span>Nombre del usuario</span>
       </div>
-    <button class="user-sidebar__logout">
+    <button class="user-sidebar__logout"@click="handleLogout">
       Cerrar sesión
     </button>
   </aside>
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
+
+const router = useRouter()
+const authStore = useAuthStore()
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <style scoped lang="scss">
 .user-sidebar {
   width: 210px;
-  min-height: 100vh;
-  height: 100%;
+  height: 100vh;
+  position: sticky;
+  top: 0;
   background-color: #172133;
   color: white;
   padding: 12px 16px 16px;
@@ -50,7 +61,7 @@
 
 .user-sidebar__logo {
   margin-bottom: 28px;
-  font-size: 1.15rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
