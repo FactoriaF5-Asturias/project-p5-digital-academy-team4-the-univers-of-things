@@ -10,5 +10,4 @@
 
 <script setup>
 import SidebarAdmin from '@/components/layout/SidebarAdmin.vue'
-import FeaturedList from '@/components/cards/FeaturedList.vue'
 </script>
