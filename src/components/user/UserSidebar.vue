@@ -3,26 +3,26 @@
     <h2 class="user-sidebar__logo">CineMagic</h2>
 
     <nav class="user-sidebar__nav">
-      <RouterLink to="/">
-  <span class="user-sidebar__icon">⌂</span>
-  Inicio
-</RouterLink>
+  <RouterLink to="/">
+    <span class="user-sidebar__icon">⌂</span>
+    Inicio
+  </RouterLink>
 
-      <RouterLink to="/user/favorites">
-        <span class="user-sidebar__icon">♡</span>
-        Favoritos
-      </RouterLink>
+  <RouterLink to="/user/favorites">
+    <span class="user-sidebar__icon">♡</span>
+    Favoritos
+  </RouterLink>
 
-      <RouterLink to="/user/profile">
-        <span class="user-sidebar__icon">○</span>
-        Perfil
-      </RouterLink>
+  <RouterLink to="/user">
+    <span class="user-sidebar__icon">○</span>
+    Perfil
+  </RouterLink>
 
-      <RouterLink to="/user/settings">
-        <span class="user-sidebar__icon">⚙</span>
-        Ajustes
-      </RouterLink>
-    </nav>
+  <RouterLink to="/user/settings">
+    <span class="user-sidebar__icon">⚙</span>
+    Ajustes
+  </RouterLink>
+</nav>
       <div class="user-sidebar__profile">
         <div class="user-sidebar__avatar">A</div>
         <span>Nombre del usuario</span>
@@ -114,4 +114,21 @@
     color: #ffffff;
   }
 }
+
+@media (max-width: 1000px) {
+  .user-sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .user-sidebar__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .user-sidebar__bottom {
+    display: none;
+  }
+}
 </style>
+

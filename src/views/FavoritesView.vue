@@ -101,7 +101,32 @@ onMounted(async () => {
 }
 
 .favorites-page__footer {
-  margin-top: 95;
-  padding-top: 40px;
+  margin-top: auto;
+  padding-top: 48px;
 }
+@media (max-width: 900px) {
+  .favorites-page {
+    flex-direction: column;
+  }
+
+  .favorites-page__content {
+    padding: 24px;
+  }
+
+  .favorites-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .favorites-page__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .favorites-page__header h1 {
+    font-size: 2rem;
+  }
+}
+
 </style>
+

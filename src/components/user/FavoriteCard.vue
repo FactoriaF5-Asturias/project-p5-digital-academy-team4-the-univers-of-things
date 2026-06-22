@@ -23,26 +23,46 @@ defineProps({
 
 <style scoped lang="scss">
 .favorite-card {
-  height: 305px;
+  background: #172133;
+  border: 1px solid #334155;
+  border-radius: 14px;
+  overflow: hidden;
+  color: white;
+  height: 270px;
+  display: flex;
+  flex-direction: column;
 }
 
 .favorite-card__image {
   width: 100%;
   height: 150px;
-  object-fit: cover;
-  object-position: top;
+  object-fit: contain;
+  object-position: center;
   display: block;
-  background-color: #ffffff;
+  background-color: #172133;
 }
 
 .favorite-card__content {
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
+
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  p {
+    color: #cbd5e1;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
 }
 
 .favorite-card__rating {
   margin-top: auto;
-  padding-top: 12px;
+  color: #facc15;
 }
 </style>

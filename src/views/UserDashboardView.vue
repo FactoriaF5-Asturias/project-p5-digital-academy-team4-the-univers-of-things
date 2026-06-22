@@ -74,4 +74,17 @@ import Footer from '@/components/Footer.vue'
   border: none;
   border-top: 1px solid #23324b;
 }
+@media (max-width: 1000px) {
+  .user-dashboard {
+    flex-direction: column;
+  }
+
+  .user-dashboard__content {
+    padding: 20px;
+  }
+
+  .user-dashboard__summary {
+    flex-direction: column;
+  }
+}
 </style>
