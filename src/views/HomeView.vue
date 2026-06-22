@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import Tarjetaspersonajes from '@/components/cards/tarjetaspersonajes.vue'
-
 const personajes = ref([])
 
 onMounted(async () => {
