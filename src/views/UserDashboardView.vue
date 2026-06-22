@@ -69,6 +69,7 @@ import Footer from '@/components/Footer.vue'
   gap: 20px;
   margin-top: 32px;
 }
+
 .user-dashboard__divider {
   margin-top: 40px;
   border: none;

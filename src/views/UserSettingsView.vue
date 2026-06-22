@@ -73,7 +73,6 @@ import Footer from '@/components/Footer.vue'
 
 .settings-page__content {
   flex: 1;
-  min-height: 100vh;
   padding: 24px 48px 16px;
   color: white;
   display: flex;
@@ -98,8 +97,8 @@ import Footer from '@/components/Footer.vue'
   background: #172133;
   border: 1px solid #334155;
   border-radius: 16px;
-  padding: 18px 22px;
-  margin-bottom: 16px;
+  padding: 14px 22px;
+  margin-bottom: 12px;
 }
 
 .settings-page__avatar-row {
@@ -179,7 +178,7 @@ import Footer from '@/components/Footer.vue'
 }
 
 .settings-page__footer {
-  margin-top: auto;
+  margin-top: 8px;
 }
 
 @media (max-width: 1000px) {
