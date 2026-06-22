@@ -9,24 +9,57 @@
  
     <!-- Navegación -->
     <nav class="flex-1 space-y-2">
-      <RouterLink
-        to="/"
-        class="flex items-center gap-4 text-on-surface-variant px-6 py-3 hover:bg-surface-variant hover:text-on-surface transition-colors duration-300"
-      >
-        <span class="material-symbols-outlined">home</span>
-        <span class="font-label-lg text-label-lg">Home</span>
-      </RouterLink>
- 
-      <RouterLink
-        to="/admin"
-        class="flex items-center gap-4 px-6 py-3 transition-all duration-300 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface"
-        active-class="bg-primary/10 text-primary border-l-4 border-primary"
-        exact-active-class="bg-primary/10 text-primary border-l-4 border-primary"
-      >
-        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings_suggest</span>
-        <span class="font-label-lg text-label-lg">Admin</span>
-      </RouterLink>
-    </nav>
+
+  <RouterLink
+    to="/"
+    class="flex items-center gap-4 text-on-surface-variant px-6 py-3 hover:bg-surface-variant hover:text-on-surface transition-colors duration-300"
+  >
+    <span class="material-symbols-outlined">home</span>
+    <span class="font-label-lg text-label-lg">Home</span>
+  </RouterLink>
+
+  <RouterLink
+    to="/admin"
+    class="flex items-center gap-4 px-6 py-3 transition-all duration-300 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface"
+    active-class="bg-primary/10 text-primary border-l-4 border-primary"
+    exact-active-class="bg-primary/10 text-primary border-l-4 border-primary"
+  >
+    <span
+      class="material-symbols-outlined"
+      style="font-variation-settings: 'FILL' 1;"
+    >
+      dashboard
+    </span>
+
+    <span class="font-label-lg text-label-lg">
+      Dashboard
+    </span>
+  </RouterLink>
+
+  <RouterLink
+  to="/admin/users"
+  class="flex items-center gap-4 px-6 py-3..."
+  exact-active-class="bg-primary/10 text-primary border-l-4 border-primary"
+>
+  <span class="material-symbols-outlined">group</span>
+  <span class="font-label-lg text-label-lg">User Directory</span>
+</RouterLink>
+
+  <RouterLink
+    to="/admin/featured"
+    class="flex items-center gap-4 px-6 py-3 transition-all duration-300 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface"
+    active-class="bg-primary/10 text-primary border-l-4 border-primary"
+  >
+    <span class="material-symbols-outlined">
+      star
+    </span>
+
+    <span class="font-label-lg text-label-lg">
+      Featured Characters
+    </span>
+  </RouterLink>
+
+</nav>
  
     <!-- Bloque inferior: avatar + logout -->
     <div class="px-6 pt-8 border-t glass-stroke mt-auto">
