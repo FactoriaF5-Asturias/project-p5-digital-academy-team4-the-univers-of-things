@@ -3,47 +3,70 @@
     <h2 class="user-sidebar__logo">CineMagic</h2>
 
     <nav class="user-sidebar__nav">
-  <RouterLink to="/">
-    <span class="user-sidebar__icon">⌂</span>
-    Inicio
-  </RouterLink>
+      <RouterLink to="/">
+        <span class="user-sidebar__icon">⌂</span>
+        Inicio
+      </RouterLink>
 
-  <RouterLink to="/user/favorites">
-    <span class="user-sidebar__icon">♡</span>
-    Favoritos
-  </RouterLink>
+      <RouterLink to="/user/favorites">
+        <span class="user-sidebar__icon">♡</span>
+        Favoritos
+      </RouterLink>
 
-  <RouterLink to="/user">
-    <span class="user-sidebar__icon">○</span>
-    Perfil
-  </RouterLink>
+      <RouterLink to="/user">
+        <span class="user-sidebar__icon">○</span>
+        Perfil
+      </RouterLink>
 
-  <RouterLink to="/user/settings">
-    <span class="user-sidebar__icon">⚙</span>
-    Ajustes
-  </RouterLink>
-</nav>
-      <div class="user-sidebar__profile">
-        <div class="user-sidebar__avatar">A</div>
-        <span>Nombre del usuario</span>
+      <RouterLink to="/user/settings">
+        <span class="user-sidebar__icon">⚙</span>
+        Ajustes
+      </RouterLink>
+    </nav>
+
+    <div class="user-sidebar__profile">
+      <div class="user-sidebar__avatar">
+        <img
+          v-if="userAvatar"
+          :src="userAvatar"
+          alt="Avatar de usuario"
+        />
+        <span v-else>A</span>
       </div>
-    <button class="user-sidebar__logout"@click="handleLogout">
+
+      <span>Nombre del usuario</span>
+    </div>
+
+    <button class="user-sidebar__logout" @click="handleLogout">
       Cerrar sesión
     </button>
   </aside>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 
 const router = useRouter()
 const authStore = useAuthStore()
 
+const userAvatar = ref('')
+
+const loadUserAvatar = () => {
+  userAvatar.value = localStorage.getItem('userAvatar') || ''
+}
+
 const handleLogout = () => {
   authStore.logout()
   router.push('/login')
 }
+
+onMounted(() => {
+  loadUserAvatar()
+
+  window.addEventListener('storage', loadUserAvatar)
+})
 </script>
 
 <style scoped lang="scss">
@@ -77,6 +100,7 @@ const handleLogout = () => {
     padding: 10px 12px;
     border-radius: 8px;
     font-size: 0.95rem;
+
     &:hover,
     &.router-link-active {
       background-color: #253247;
@@ -103,11 +127,19 @@ const handleLogout = () => {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background-color: #475569;
+  background: #475569;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
 .user-sidebar__logout {
@@ -129,7 +161,9 @@ const handleLogout = () => {
 @media (max-width: 1000px) {
   .user-sidebar {
     width: 100%;
+    height: auto;
     min-height: auto;
+    position: static;
   }
 
   .user-sidebar__nav {
@@ -137,9 +171,8 @@ const handleLogout = () => {
     flex-wrap: wrap;
   }
 
-  .user-sidebar__bottom {
-    display: none;
+  .user-sidebar__profile {
+    margin-top: 16px;
   }
 }
 </style>
-

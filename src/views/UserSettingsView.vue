@@ -12,17 +12,42 @@
         <h2>Avatar de perfil</h2>
 
         <div class="settings-page__avatar-row">
-          <div class="settings-page__avatar-main">A</div>
+          <div class="settings-page__avatar-main">
+            <img
+              v-if="selectedAvatar"
+              :src="selectedAvatar"
+              :alt="selectedCharacterName"
+            />
+            <span v-else>A</span>
+          </div>
 
-          <div>
-            <p>Elige una imagen para tu perfil.</p>
+          <div class="settings-page__avatar-info">
+            <label for="character-avatar">
+              Elige un personaje Disney como avatar.
+            </label>
 
-            <div class="settings-page__avatar-options">
-              <button>A</button>
-              <button>M</button>
-              <button>S</button>
-              <button>E</button>
-            </div>
+            <select
+              id="character-avatar"
+              v-model="selectedCharacterId"
+              @change="updateAvatar"
+            >
+              <option value="">Selecciona un personaje</option>
+
+              <option
+                v-for="character in characters"
+                :key="character._id"
+                :value="character._id"
+              >
+                {{ character.name }}
+              </option>
+            </select>
+
+            <p
+              v-if="selectedCharacterName"
+              class="settings-page__selected-name"
+            >
+              Avatar seleccionado: {{ selectedCharacterName }}
+            </p>
           </div>
         </div>
       </section>
@@ -33,7 +58,10 @@
         <form class="settings-page__form">
           <label>
             Contraseña actual
-            <input type="password" placeholder="Introduce tu contraseña actual" />
+            <input
+              type="password"
+              placeholder="Introduce tu contraseña actual"
+            />
           </label>
 
           <div class="settings-page__form-row">
@@ -60,8 +88,48 @@
 </template>
 
 <script setup>
+import { computed, onMounted, ref } from 'vue'
 import UserSidebar from '@/components/user/UserSidebar.vue'
 import Footer from '@/components/Footer.vue'
+
+const characters = ref([])
+const selectedCharacterId = ref('')
+const selectedAvatar = ref(localStorage.getItem('userAvatar') || '')
+const selectedCharacterName = ref(localStorage.getItem('userAvatarName') || '')
+
+const selectedCharacter = computed(() =>
+  characters.value.find(
+    (character) => character._id === Number(selectedCharacterId.value),
+  ),
+)
+
+const getCharacters = async () => {
+  try {
+    const response = await fetch(
+      'https://api.disneyapi.dev/character?page=1&pageSize=50',
+    )
+
+    const data = await response.json()
+
+    characters.value = data.data.filter((character) => character.imageUrl)
+  } catch (error) {
+    console.error('Error al cargar personajes Disney:', error)
+  }
+}
+
+const updateAvatar = () => {
+  if (!selectedCharacter.value) return
+
+  selectedAvatar.value = selectedCharacter.value.imageUrl
+  selectedCharacterName.value = selectedCharacter.value.name
+
+  localStorage.setItem('userAvatar', selectedAvatar.value)
+  localStorage.setItem('userAvatarName', selectedCharacterName.value)
+}
+
+onMounted(() => {
+  getCharacters()
+})
 </script>
 
 <style scoped lang="scss">
@@ -121,21 +189,41 @@ import Footer from '@/components/Footer.vue'
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 
-.settings-page__avatar-options {
+.settings-page__avatar-info {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
 
-  button {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: none;
-    background: #334155;
-    color: white;
-    cursor: pointer;
+  label {
+    color: #cbd5e1;
+    font-size: 0.9rem;
   }
+
+  select {
+    width: 100%;
+    max-width: 420px;
+    background: #253247;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 12px;
+    color: white;
+  }
+}
+
+.settings-page__selected-name {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  margin: 0;
 }
 
 .settings-page__form {
@@ -194,9 +282,21 @@ import Footer from '@/components/Footer.vue'
     max-width: 100%;
   }
 
+  .settings-page__avatar-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .settings-page__avatar-info {
+    width: 100%;
+  }
+
+  .settings-page__avatar-info select {
+    max-width: 100%;
+  }
+
   .settings-page__form-row {
     grid-template-columns: 1fr;
   }
 }
 </style>
-

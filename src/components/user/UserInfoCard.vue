@@ -1,7 +1,12 @@
 <template>
   <article class="user-info-card">
     <div class="user-info-card__avatar">
-      A
+      <img
+        v-if="userAvatar"
+        :src="userAvatar"
+        alt="Avatar de usuario"
+      />
+      <span v-else>A</span>
     </div>
 
     <div>
@@ -12,29 +17,36 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
+
+const userAvatar = ref('')
+
+const loadUserAvatar = () => {
+  userAvatar.value = localStorage.getItem('userAvatar') || ''
+}
+
+onMounted(() => {
+  loadUserAvatar()
+})
 </script>
 
 <style scoped lang="scss">
-.user-info-card {
-  width: 280px;
-  background-color: #172133;
-  border: 1px solid #334155;
-  border-radius: 16px;
-  padding: 24px;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
 .user-info-card__avatar {
-  width: 64px;
-  height: 64px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  background-color: #475569;
+  background: #475569;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 }
 </style>

@@ -1,12 +1,18 @@
 <template>
   <article class="user-stats-card">
-    <span class="user-stats-card__number">128</span>
+    <span class="user-stats-card__number">{{ totalFavorites }}</span>
     <h2>Favoritos</h2>
     <p>Personajes y películas guardados en tu lista.</p>
   </article>
 </template>
 
 <script setup>
+defineProps({
+  totalFavorites: {
+    type: Number,
+    default: 0,
+  },
+})
 </script>
 
 <style scoped lang="scss">

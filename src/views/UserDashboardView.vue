@@ -10,7 +10,7 @@
 
       <section class="user-dashboard__summary">
         <UserInfoCard />
-        <UserStatsCard />
+        <UserStatsCard :total-favorites="favoritesStore.favorites.length" />
       </section>
 
       <hr class="user-dashboard__divider" />
@@ -27,6 +27,9 @@ import UserSidebar from '@/components/user/UserSidebar.vue'
 import UserInfoCard from '@/components/user/UserInfoCard.vue'
 import UserStatsCard from '@/components/user/UserStatsCard.vue'
 import Footer from '@/components/Footer.vue'
+import { useFavoritesStore } from '@/stores/favoritesStore'
+
+const favoritesStore = useFavoritesStore()
 </script>
 
 <style scoped lang="scss">
