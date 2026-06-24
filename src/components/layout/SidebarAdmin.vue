@@ -4,8 +4,8 @@
   >
     <!-- Título -->
     <div class="px-6 mb-10">
-      <h1 class="font-headline-sm text-headline-sm font-bold text-primary">Admin</h1>
-    </div>
+  <h1 class="font-bold text-2xl text-on-surface tracking-tight">CineMagic</h1>
+</div>
  
     <!-- Navegación -->
     <nav class="flex-1 space-y-2">
@@ -14,7 +14,7 @@
     to="/"
     class="flex items-center gap-4 text-on-surface-variant px-6 py-3 hover:bg-surface-variant hover:text-on-surface transition-colors duration-300"
   >
-    <span class="material-symbols-outlined">home</span>
+    <span class="material-symbols-outlined text-[20px]">house</span>
     <span class="font-label-lg text-label-lg">Home</span>
   </RouterLink>
 
@@ -24,39 +24,26 @@
     active-class="bg-primary/10 text-primary border-l-4 border-primary"
     exact-active-class="bg-primary/10 text-primary border-l-4 border-primary"
   >
-    <span
-      class="material-symbols-outlined"
-      style="font-variation-settings: 'FILL' 1;"
-    >
-      dashboard
-    </span>
-
-    <span class="font-label-lg text-label-lg">
-      Dashboard
-    </span>
+    <span class="material-symbols-outlined text-[20px]">bar_chart</span>
+    <span class="font-label-lg text-label-lg">Dashboard</span>
   </RouterLink>
 
   <RouterLink
-  to="/admin/users"
-  class="flex items-center gap-4 px-6 py-3..."
-  exact-active-class="bg-primary/10 text-primary border-l-4 border-primary"
->
-  <span class="material-symbols-outlined">group</span>
-  <span class="font-label-lg text-label-lg">User Directory</span>
-</RouterLink>
+    to="/admin/users"
+    class="flex items-center gap-4 px-6 py-3 transition-all duration-300 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface"
+    active-class="bg-primary/10 text-primary border-l-4 border-primary"
+  >
+    <span class="material-symbols-outlined text-[20px]">contacts</span>
+    <span class="font-label-lg text-label-lg">User Directory</span>
+  </RouterLink>
 
   <RouterLink
     to="/admin/featured"
     class="flex items-center gap-4 px-6 py-3 transition-all duration-300 text-on-surface-variant hover:bg-surface-variant hover:text-on-surface"
     active-class="bg-primary/10 text-primary border-l-4 border-primary"
   >
-    <span class="material-symbols-outlined">
-      star
-    </span>
-
-    <span class="font-label-lg text-label-lg">
-      Featured Characters
-    </span>
+    <span class="material-symbols-outlined text-[20px]">thumb_up</span>
+    <span class="font-label-lg text-label-lg">Featured Characters</span>
   </RouterLink>
 
 </nav>
