@@ -50,7 +50,7 @@ export const authService = {
       }
     }
 
-    const newUser = { name, email, password }
+    const newUser = { name, email, password, role: 'customer' }
     users.push(newUser)
     localStorage.setItem('users', JSON.stringify(users))
 
