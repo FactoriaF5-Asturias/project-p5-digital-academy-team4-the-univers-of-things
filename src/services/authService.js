@@ -4,10 +4,7 @@ export const authService = {
       return {
         success: true,
         token: 'fake-admin-token',
-        user: {
-          email,
-          role: 'admin',
-        },
+        user: { email, role: 'admin' },
       }
     }
 
@@ -15,8 +12,22 @@ export const authService = {
       return {
         success: true,
         token: 'fake-customer-token',
+        user: { email, role: 'customer' },
+      }
+    }
+
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const foundUser = users.find(
+      (u) => u.email === email && u.password === password
+    )
+
+    if (foundUser) {
+      return {
+        success: true,
+        token: 'fake-user-token',
         user: {
-          email,
+          email: foundUser.email,
+          name: foundUser.name,
           role: 'customer',
         },
       }
@@ -32,7 +43,6 @@ export const authService = {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
 
     const existingUser = users.find((u) => u.email === email)
-
     if (existingUser) {
       return {
         success: false,
