@@ -4,8 +4,8 @@ import LoginView from '../views/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-
   routes: [
+<<<<<<< HEAD
     {
       path: '/',
       name: 'home',
@@ -23,10 +23,14 @@ const router = createRouter({
   component: () => import('../views/RegisterView.vue')
 },
 
+=======
+    { path: '/', name: 'home', component: HomeView },
+    { path: '/login', name: 'login', component: LoginView },
+>>>>>>> feat/user-directory
     {
       path: '/admin',
-      name: 'admin-dashboard',
       component: () => import('../views/AdminDashboardView.vue'),
+<<<<<<< HEAD
       meta: {
         requiresAuth: true,
         role: 'admin',
@@ -59,21 +63,30 @@ const router = createRouter({
   meta: {
     requiresAuth: true,
     hideHeader: true
+=======
+      // Al ponerlo aquí, todos los hijos lo heredan
+      meta: { requiresAuth: true, hideHeader: true }, 
+      children: [
+        {
+          path: '', 
+          name: 'admin-dashboard',
+          component: () => import('../views/DashboardHome.vue')
+        },
+        {
+          path: 'users',
+          name: 'user-directory',
+          component: () => import('../views/UserDirectoryView.vue')
+        },
+        {
+          path: 'featured',
+          name: 'featured-management',
+          component: () => import('../views/FeaturedManagementView.vue')
+        }
+      ]
+>>>>>>> feat/user-directory
     }
    },
   ]
-})
-
-router.beforeEach((to) => {
-  if (to.meta.requiresAuth) {
-    const token = localStorage.getItem('token')
-
-    if (!token) {
-      return '/login'
-    }
-  }
-
-  return true
 })
 
 export default router

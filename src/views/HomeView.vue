@@ -4,6 +4,7 @@ import { useCharactersStore } from '@/stores/charactersStore'
 
 import Hero from '../components/herosection/hero.vue'
 import Tarjetaspersonajes from '@/components/cards/tarjetaspersonajes.vue'
+<<<<<<< HEAD
 import BarraBusqueda from '@/components/BarraBusqueda/barraBusqueda.vue'
 import TopRatedCharacters from '@/components/TopRatedCharacters/topRatedCharacters.vue'
 
@@ -15,6 +16,16 @@ const filteredCharacters = computed(() => {
         .toLowerCase()
         .includes(charactersStore.search.toLowerCase())
     )
+=======
+const personajes = ref([])
+
+onMounted(async () => {
+  const response = await fetch('https://api.disneyapi.dev/character')
+  const data = await response.json()
+
+  personajes.value = data.data
+    .filter(personaje => personaje.imageUrl)
+>>>>>>> feat/user-directory
     .slice(0, 10)
 })
 

@@ -38,9 +38,14 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('token')
       localStorage.removeItem('user')
     },
+<<<<<<< HEAD
 
   initAuth() {
   const token = localStorage.getItem('token')
+=======
+    initAuth() {
+      const token = localStorage.getItem('token')
+>>>>>>> feat/user-directory
 
   if (token) {
     this.token = token
