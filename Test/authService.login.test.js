@@ -28,4 +28,8 @@ it('should login hardcoded customer user', () => {
     const result = authService.login('test@example.com', 'wrongpassword')
     expect(result.success).toBe(false)
   })
+   it('should fail with unknown email', () => {
+    const result = authService.login('unknown@mail.com', '123456')
+    expect(result.success).toBe(false)
+  })
 })
