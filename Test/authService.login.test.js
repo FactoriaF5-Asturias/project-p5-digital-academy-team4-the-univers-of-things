@@ -23,4 +23,9 @@ it('should login hardcoded customer user', () => {
     expect(result.success).toBe(true)
     expect(result.user.role).toBe('customer')
   })
+  it('should fail with wrong password', () => {
+    authService.register('Test User', 'test@example.com', '123456')
+    const result = authService.login('test@example.com', 'wrongpassword')
+    expect(result.success).toBe(false)
+  })
 })
