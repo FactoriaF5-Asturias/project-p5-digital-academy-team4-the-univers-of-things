@@ -12,5 +12,9 @@ describe('authService.login', () => {
     expect(result.success).toBe(true)
     expect(result.user.role).toBe('admin')
   })
-
+it('should login hardcoded customer user', () => {
+    const result = authService.login('user@test.com', '123456')
+    expect(result.success).toBe(true)
+    expect(result.user.role).toBe('customer')
+  })
 })
