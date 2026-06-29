@@ -1,9 +1,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
-
+import { useFavoritesStore } from '@/stores/favoritesStore'
+import { useAuthStore } from '@/stores/authStore'
 const route = useRoute()
 const character = ref(null)
+const favoritesStore = useFavoritesStore()
+const authStore = useAuthStore()
 
 onMounted(async () => {
   const response = await fetch(`https://api.disneyapi.dev/character/${route.params.id}`)
@@ -35,6 +38,13 @@ onMounted(async () => {
       <h1 class="mb-6 text-center text-4xl font-bold">
         {{ character.name }}
       </h1>
+      <button
+  v-if="authStore.user?.role === 'customer'"
+  @click="favoritesStore.addFavorite(character)"
+  class="mb-6 rounded-lg bg-red-600 px-5 py-2 font-semibold hover:bg-red-700"
+>
+  ❤️ Añadir a favoritos
+</button>
 
       <p v-if="character.films?.length" class="mb-3">
         <strong>Películas:</strong> {{ character.films.join(', ') }}
@@ -42,10 +52,6 @@ onMounted(async () => {
 
       <p v-if="character.tvShows?.length" class="mb-3">
         <strong>Series:</strong> {{ character.tvShows.join(', ') }}
-      </p>
-
-      <p v-if="character.videoGames?.length" class="mb-3">
-        <strong>Videojuegos:</strong> {{ character.videoGames.join(', ') }}
       </p>
     </section>
   </main>
