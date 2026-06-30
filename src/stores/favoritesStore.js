@@ -1,15 +1,37 @@
 import { defineStore } from 'pinia'
+import { useAuthStore } from './authStore'
 
 export const useFavoritesStore = defineStore('favorites', {
-  state: () => ({
-    favorites: JSON.parse(localStorage.getItem('favorites')) || []
-  }),
+ state: () => ({
+  favorites: []
+}),
 
   actions: {
     saveFavorites() {
       localStorage.setItem('favorites', JSON.stringify(this.favorites))
     },
+loadFavorites() {
+  const authStore = useAuthStore()
 
+  if (!authStore.user) {
+    this.favorites = []
+    return
+  }
+
+  const key = `favorites_${authStore.user.email}`
+
+  this.favorites = JSON.parse(localStorage.getItem(key)) || []
+},
+
+saveFavorites() {
+  const authStore = useAuthStore()
+
+  if (!authStore.user) return
+
+  const key = `favorites_${authStore.user.email}`
+
+  localStorage.setItem(key, JSON.stringify(this.favorites))
+},
     addFavorite(item) {
       const exists = this.favorites.some((favorite) => favorite._id === item._id)
 

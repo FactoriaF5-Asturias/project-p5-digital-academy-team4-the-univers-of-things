@@ -1,6 +1,7 @@
 <script setup>
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useFavoritesStore } from '@/stores/favoritesStore'
+import { useAuthStore } from '@/stores/authStore'
 
 const props = defineProps({
   character: {
@@ -10,17 +11,27 @@ const props = defineProps({
 })
 
 const favoritesStore = useFavoritesStore()
-const selectedRating = ref(0)
+const authStore = useAuthStore()
+
+const selectedRating = computed(() => {
+  const favorite = favoritesStore.favorites.find(
+    (favorite) => favorite._id === props.character._id
+  )
+
+  return favorite?.rating || 0
+})
 
 const rateCharacter = (rating) => {
-  selectedRating.value = rating
   favoritesStore.addFavorite(props.character)
   favoritesStore.rateFavorite(props.character._id, rating)
 }
 </script>
 
 <template>
-  <div class="mt-3 flex justify-center gap-1">
+  <div
+    v-if="authStore.user?.role === 'customer'"
+    class="mt-3 flex justify-center gap-1"
+  >
     <button
       v-for="star in 5"
       :key="star"

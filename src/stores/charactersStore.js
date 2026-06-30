@@ -4,24 +4,44 @@ export const useCharactersStore = defineStore('characters', {
   state: () => ({
     characters: [],
     search: '',
-    topRatedCharacters: []
+    topRatedCharacters: [],
+    loading: false
   }),
-actions: {
-  async fetchCharacters() {
-    try {
-      const response = await fetch('https://api.disneyapi.dev/character')
-      const data = await response.json()
 
-      this.characters = data.data.filter(
-        (character) => character.imageUrl
-      )
-    } catch (error) {
-      console.error('Error al obtener los personajes:', error)
+  actions: {
+    async fetchCharacters() {
+      this.loading = true
+
+      try {
+        let allCharacters = []
+        let page = 1
+        let hasNextPage = true
+
+        while (hasNextPage) {
+          const response = await fetch(
+            `https://api.disneyapi.dev/character?page=${page}`
+          )
+
+          const data = await response.json()
+
+          allCharacters.push(
+            ...data.data.filter((character) => character.imageUrl)
+          )
+
+          hasNextPage = data.info.nextPage !== null
+          page++
+        }
+
+        this.characters = allCharacters
+      } catch (error) {
+        console.error('Error al obtener los personajes:', error)
+      } finally {
+        this.loading = false
+      }
+    },
+
+    setSearch(searchText) {
+      this.search = searchText
     }
-  },
-
-  setSearch(searchText) {
-    this.search = searchText
-  }
   }
 })
