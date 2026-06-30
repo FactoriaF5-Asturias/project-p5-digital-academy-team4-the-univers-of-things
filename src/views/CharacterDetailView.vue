@@ -1,26 +1,25 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { computed } from 'vue'
 import { useFavoritesStore } from '@/stores/favoritesStore'
 import { useAuthStore } from '@/stores/authStore'
-const route = useRoute()
-const character = ref(null)
+
+const props = defineProps({
+  character: {
+    type: Object,
+    required: true
+  }
+})
+
 const favoritesStore = useFavoritesStore()
 const authStore = useAuthStore()
-const selectedRating = ref(0)
+
+const selectedRating = computed(() => {
+  return favoritesStore.getRating(props.character._id)
+})
 
 const rateCharacter = (rating) => {
-  selectedRating.value = rating
-  favoritesStore.addFavorite(character.value)
-  favoritesStore.rateFavorite(character.value._id, rating)
+  favoritesStore.rateCharacter(props.character, rating)
 }
-
-onMounted(async () => {
-  const response = await fetch(`https://api.disneyapi.dev/character/${route.params.id}`)
-  const data = await response.json()
-
-  character.value = data.data
-})
 </script>
 
 <template>
@@ -52,23 +51,7 @@ onMounted(async () => {
 >
   ❤️ Añadir a favoritos
 </button>
-<div
-  v-if="authStore.user?.role === 'customer'"
-  class="mb-6"
->
-  <p class="mb-2 font-semibold">
-    Puntúa este personaje:
-  </p>
 
-  <button
-    v-for="star in 5"
-    :key="star"
-    @click="rateCharacter(star)"
-    class="text-3xl transition hover:scale-110"
-  >
-    {{ star <= selectedRating ? '⭐' : '☆' }}
-  </button>
-</div>
 
       <p v-if="character.films?.length" class="mb-3">
         <strong>Películas:</strong> {{ character.films.join(', ') }}

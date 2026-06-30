@@ -5,7 +5,7 @@ import { useFavoritesStore } from '@/stores/favoritesStore'
 const favoritesStore = useFavoritesStore()
 
 const topRatedCharacters = computed(() => {
-  return favoritesStore.favorites
+  return favoritesStore.ratings
     .filter((character) => character.rating > 0)
     .sort((a, b) => b.rating - a.rating)
     .slice(0, 5)

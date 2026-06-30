@@ -2,36 +2,44 @@ import { defineStore } from 'pinia'
 import { useAuthStore } from './authStore'
 
 export const useFavoritesStore = defineStore('favorites', {
- state: () => ({
-  favorites: []
-}),
+  state: () => ({
+    favorites: [],
+    ratings: []
+  }),
 
   actions: {
-    saveFavorites() {
-      localStorage.setItem('favorites', JSON.stringify(this.favorites))
+    getUserKey(type) {
+      const authStore = useAuthStore()
+
+      if (!authStore.user) return null
+
+      return `${type}_${authStore.user.email}`
     },
-loadFavorites() {
-  const authStore = useAuthStore()
 
-  if (!authStore.user) {
-    this.favorites = []
-    return
-  }
+    loadFavorites() {
+      const favoritesKey = this.getUserKey('favorites')
+      const ratingsKey = this.getUserKey('ratings')
 
-  const key = `favorites_${authStore.user.email}`
+      if (!favoritesKey || !ratingsKey) {
+        this.favorites = []
+        this.ratings = []
+        return
+      }
 
-  this.favorites = JSON.parse(localStorage.getItem(key)) || []
-},
+      this.favorites = JSON.parse(localStorage.getItem(favoritesKey)) || []
+      this.ratings = JSON.parse(localStorage.getItem(ratingsKey)) || []
+    },
 
-saveFavorites() {
-  const authStore = useAuthStore()
+    saveFavorites() {
+      const favoritesKey = this.getUserKey('favorites')
+      const ratingsKey = this.getUserKey('ratings')
 
-  if (!authStore.user) return
+      if (!favoritesKey || !ratingsKey) return
 
-  const key = `favorites_${authStore.user.email}`
+      localStorage.setItem(favoritesKey, JSON.stringify(this.favorites))
+      localStorage.setItem(ratingsKey, JSON.stringify(this.ratings))
+    },
 
-  localStorage.setItem(key, JSON.stringify(this.favorites))
-},
     addFavorite(item) {
       const exists = this.favorites.some((favorite) => favorite._id === item._id)
 
@@ -39,8 +47,7 @@ saveFavorites() {
         this.favorites.push({
           ...item,
           customTitle: item.name,
-          customDescription: 'Personaje del universo Disney.',
-          rating: 0
+          customDescription: 'Personaje del universo Disney.'
         })
 
         this.saveFavorites()
@@ -52,6 +59,18 @@ saveFavorites() {
       this.saveFavorites()
     },
 
+    isFavorite(id) {
+      return this.favorites.some((favorite) => favorite._id === id)
+    },
+
+    toggleFavorite(item) {
+      if (this.isFavorite(item._id)) {
+        this.removeFavorite(item._id)
+      } else {
+        this.addFavorite(item)
+      }
+    },
+
     updateFavorite(id, updatedData) {
       const favorite = this.favorites.find((favorite) => favorite._id === id)
 
@@ -61,13 +80,27 @@ saveFavorites() {
       }
     },
 
-    rateFavorite(id, rating) {
-      const favorite = this.favorites.find((favorite) => favorite._id === id)
+    rateCharacter(character, rating) {
+      const existingRating = this.ratings.find((item) => item._id === character._id)
 
-      if (favorite) {
-        favorite.rating = rating
-        this.saveFavorites()
+      if (existingRating) {
+        existingRating.rating = rating
+      } else {
+        this.ratings.push({
+          _id: character._id,
+          name: character.name,
+          imageUrl: character.imageUrl,
+          rating
+        })
       }
+
+      this.saveFavorites()
+    },
+
+    getRating(id) {
+      const rating = this.ratings.find((item) => item._id === id)
+
+      return rating?.rating || 0
     }
   }
 })

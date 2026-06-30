@@ -14,16 +14,11 @@ const favoritesStore = useFavoritesStore()
 const authStore = useAuthStore()
 
 const selectedRating = computed(() => {
-  const favorite = favoritesStore.favorites.find(
-    (favorite) => favorite._id === props.character._id
-  )
-
-  return favorite?.rating || 0
+  return favoritesStore.getRating(props.character._id)
 })
 
 const rateCharacter = (rating) => {
-  favoritesStore.addFavorite(props.character)
-  favoritesStore.rateFavorite(props.character._id, rating)
+  favoritesStore.rateCharacter(props.character, rating)
 }
 </script>
 
