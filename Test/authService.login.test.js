@@ -1,10 +1,11 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { authService } from '@/services/authService'
+import { authService, seedAdminUser } from '@/services/authService'
 
 describe('authService.login', () => {
 
   beforeEach(() => {
     localStorage.clear()
+    seedAdminUser()
   })
 
   it('should login hardcoded admin user', () => {
@@ -12,7 +13,8 @@ describe('authService.login', () => {
     expect(result.success).toBe(true)
     expect(result.user.role).toBe('admin')
   })
-it('should login hardcoded customer user', () => {
+it('should login a customer user after registering', () => {
+    authService.register('Test Customer', 'user@test.com', '123456')
     const result = authService.login('user@test.com', '123456')
     expect(result.success).toBe(true)
     expect(result.user.role).toBe('customer')
