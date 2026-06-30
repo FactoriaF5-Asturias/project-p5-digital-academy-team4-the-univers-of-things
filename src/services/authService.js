@@ -1,6 +1,6 @@
 const ADMIN_EMAIL = 'admin@cinemagic.com'
 
-function seedAdminUser() {
+export function seedAdminUser() {
   const users = JSON.parse(localStorage.getItem('users') || '[]')
   const adminExists = users.some((u) => u.email === ADMIN_EMAIL)
   const ADMIN_PASSWORD = atob('MTIzNDU2')
