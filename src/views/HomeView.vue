@@ -22,10 +22,6 @@ onMounted(async () => {
     <h1 class="mb-8 text-3xl font-bold text-white">
       Disney Characters
     </h1>
-<div v-if="adminInfo" class="mb-6 rounded-lg bg-slate-800 p-4 text-sm text-slate-300 border border-slate-700">
-      <span class="font-semibold text-white">Administrador registrado:</span>
-      {{ adminInfo.name }} ({{ adminInfo.email }})
-    </div>
     <section class="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
       <Tarjetaspersonajes
         v-for="personaje in personajes"
