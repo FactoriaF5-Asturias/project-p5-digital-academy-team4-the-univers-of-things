@@ -1,32 +1,34 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
+import { useFavoritesStore } from '@/stores/favoritesStore'
 
-const topRatedCharacters = ref([])
+const favoritesStore = useFavoritesStore()
 
-const fetchTopRatedCharacters = async () => {
-  try {
-    const response = await fetch('https://api.disneyapi.dev/character')
-    const data = await response.json()
-
-    topRatedCharacters.value = data.data
-      .filter((character) => character.imageUrl)
-      .slice(0, 5)
-  } catch (error) {
-    console.error('Error loading top rated characters:', error)
-  }
-}
-
-onMounted(() => {
-  fetchTopRatedCharacters()
+const topRatedCharacters = computed(() => {
+  return favoritesStore.favorites
+    .filter((character) => character.rating > 0)
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 5)
 })
 </script>
+
 <template>
   <section class="px-6 py-10">
     <h2 class="mb-6 text-2xl font-bold text-white">
       ⭐ Top Rated by Users
     </h2>
 
-    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+    <p
+      v-if="topRatedCharacters.length === 0"
+      class="text-slate-300"
+    >
+      Todavía no hay personajes puntuados.
+    </p>
+
+    <div
+      v-else
+      class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5"
+    >
       <article
         v-for="character in topRatedCharacters"
         :key="character._id"
@@ -36,7 +38,7 @@ onMounted(() => {
           :src="character.imageUrl"
           :alt="character.name"
           class="h-72 w-full object-cover"
-        />
+        >
 
         <div class="p-4">
           <h3 class="text-lg font-bold text-white">
@@ -44,7 +46,7 @@ onMounted(() => {
           </h3>
 
           <p class="mt-2 text-yellow-400">
-            ⭐ 4.8
+            ⭐ {{ character.rating }}
           </p>
         </div>
       </article>

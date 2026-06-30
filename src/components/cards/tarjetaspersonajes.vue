@@ -14,6 +14,8 @@
         <h3 class="text-center text-lg font-semibold text-white">
           {{ personaje.name }}
         </h3>
+
+        <RatingStars :character="personaje" />
       </div>
     </article>
   </RouterLink>
@@ -21,6 +23,7 @@
 
 <script setup>
 import { RouterLink } from 'vue-router'
+import RatingStars from '@/components/RatingStars.vue'
 
 defineProps({
   personaje: {

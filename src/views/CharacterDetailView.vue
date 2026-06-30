@@ -7,6 +7,13 @@ const route = useRoute()
 const character = ref(null)
 const favoritesStore = useFavoritesStore()
 const authStore = useAuthStore()
+const selectedRating = ref(0)
+
+const rateCharacter = (rating) => {
+  selectedRating.value = rating
+  favoritesStore.addFavorite(character.value)
+  favoritesStore.rateFavorite(character.value._id, rating)
+}
 
 onMounted(async () => {
   const response = await fetch(`https://api.disneyapi.dev/character/${route.params.id}`)
@@ -45,6 +52,23 @@ onMounted(async () => {
 >
   ❤️ Añadir a favoritos
 </button>
+<div
+  v-if="authStore.user?.role === 'customer'"
+  class="mb-6"
+>
+  <p class="mb-2 font-semibold">
+    Puntúa este personaje:
+  </p>
+
+  <button
+    v-for="star in 5"
+    :key="star"
+    @click="rateCharacter(star)"
+    class="text-3xl transition hover:scale-110"
+  >
+    {{ star <= selectedRating ? '⭐' : '☆' }}
+  </button>
+</div>
 
       <p v-if="character.films?.length" class="mb-3">
         <strong>Películas:</strong> {{ character.films.join(', ') }}
