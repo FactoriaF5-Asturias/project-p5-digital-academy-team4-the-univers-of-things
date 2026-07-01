@@ -2,32 +2,33 @@ import { defineStore } from 'pinia'
 
 export const useAdminStore = defineStore('admin', {
   state: () => ({
-    users: JSON.parse(localStorage.getItem('users')) || [],
+    users: [],
     avatar: JSON.parse(localStorage.getItem('adminProfile'))?.avatar || null
   }),
-
   getters: {
     totalUsers: (state) => state.users.length
   },
-
   actions: {
     refreshUsers() {
-      this.users = JSON.parse(localStorage.getItem('users')) || []
+      const raw = JSON.parse(localStorage.getItem('users')) || []
+      this.users = raw.map(u => ({
+        ...u,
+        status: u.status ?? 'allowed'
+      }))
+      localStorage.setItem('users', JSON.stringify(this.users))
     },
-
-    toggleUserStatus(id) {
-      const user = this.users.find(u => u.id === id)
-      if (user) {
-        user.status = user.status === 'allowed' ? 'restricted' : 'allowed'
-        this.saveToLocalStorage()
-      }
+    toggleUserStatus(email) {
+      this.users = this.users.map(u =>
+        u.email === email
+          ? { ...u, status: u.status === 'allowed' ? 'restricted' : 'allowed' }
+          : u
+      )
+      this.saveToLocalStorage()
     },
-
     setAvatar(url) {
       this.avatar = url
       this.saveToLocalStorage()
     },
-
     saveToLocalStorage() {
       localStorage.setItem('users', JSON.stringify(this.users))
       localStorage.setItem('adminProfile', JSON.stringify({ avatar: this.avatar }))

@@ -15,7 +15,7 @@
             </tr>
           </thead>
           <tbody class="divide-y glass-stroke">
-            <tr v-for="user in adminStore.users" :key="user.id" class="hover:bg-surface-container-low transition-colors group">
+            <tr v-for="user in adminStore.users" :key="user.email" class="hover:bg-surface-container-low transition-colors group">
               <td class="px-6 py-4">
                 <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-surface-variant group-hover:border-primary transition-colors">
                   <img :src="user.avatar || `https://i.pravatar.cc/60?u=${user.email}`" :alt="user.name" class="w-full h-full object-cover" />
@@ -23,9 +23,9 @@
               </td>
               <td class="px-6 py-4 font-body-md text-on-surface font-semibold">{{ user.name }}</td>
               <td class="px-6 py-4 font-body-sm text-on-surface-variant">{{ user.email }}</td>
-              <td class="px-6 py-4 flex items-center justify-center">
+              <td class="px-6 py-4 text-center">
                 <button
-                  @click="adminStore.toggleUserStatus(user.id)"
+                  @click="() => { console.log('email:', user.email, 'status:', user.status); adminStore.toggleUserStatus(user.email) }"
                   :class="[
                     'w-14 h-7 flex items-center rounded-full p-1 transition-all duration-300 border glass-stroke',
                     user.status === 'allowed' ? 'bg-primary' : 'bg-surface-variant'
