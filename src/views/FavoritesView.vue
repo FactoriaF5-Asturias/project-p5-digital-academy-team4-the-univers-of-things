@@ -1,17 +1,14 @@
 <template>
   <div class="favorites-page">
     <UserSidebar />
-
     <div class="favorites-page__main">
       <main class="favorites-page__content">
         <section class="favorites-page__header">
           <h1>Mis favoritos</h1>
           <p>Consulta todos tus personajes y películas favoritas.</p>
         </section>
-
         <section class="favorites-page__add">
           <h2>Añadir favorito</h2>
-
           <div class="favorites-page__form">
             <label>
               Inicial
@@ -26,7 +23,6 @@
                 </option>
               </select>
             </label>
-
             <label>
               Personaje
               <select v-model="selectedCharacterId">
@@ -48,7 +44,6 @@
                 placeholder="Ejemplo: Baloo"
                 @input="selectedLetter = ''"
               />
-
               <ul
                 v-if="searchCharacter && filteredCharacters.length"
                 class="favorites-page__suggestions"
@@ -62,7 +57,6 @@
                 </li>
               </ul>
             </label>
-
             <button type="button" @click="addFavorite">Añadir favorito</button>
           </div>
           <p
@@ -72,7 +66,6 @@
             No hay personajes con esa inicial.
           </p>
         </section>
-
         <section class="favorites-page__grid">
           <FavoriteCard
             v-for="favorite in favorites"
@@ -80,9 +73,9 @@
             :title="favorite.customTitle"
             :description="favorite.customDescription"
             :image="favorite.imageUrl"
-            :rating="favorite.rating"
+            :rating="favoritesStore.getRating(favorite._id)"
             @delete="favoritesStore.removeFavorite(favorite._id)"
-            @rate="favoritesStore.rateFavorite(favorite._id, $event)"
+            @rate="favoritesStore.rateCharacter(favorite, $event)"
             @edit="
               favoritesStore.updateFavorite(favorite._id, {
                 customTitle: $event.title,
@@ -92,7 +85,6 @@
           />
         </section>
       </main>
-
       <Footer />
     </div>
   </div>
@@ -115,19 +107,16 @@ const newDescription = ref("");
 const selectedLetter = ref("");
 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 const searchCharacter = ref("");
+
 const filteredCharacters = computed(() => {
   const search = searchCharacter.value.trim().toLowerCase();
-
   return availableCharacters.value
     .filter((character) => {
       const name = character.name.toLowerCase();
-
       const matchesLetter = selectedLetter.value
         ? name.startsWith(selectedLetter.value.toLowerCase())
         : true;
-
       const matchesSearch = search ? name.includes(search) : true;
-
       return matchesLetter && matchesSearch;
     })
     .sort((a, b) => a.name.localeCompare(b.name));
@@ -137,20 +126,16 @@ const addFavorite = () => {
   if (!selectedCharacterId.value) {
     return;
   }
-
   const selectedCharacter = availableCharacters.value.find(
     (character) => String(character._id) === String(selectedCharacterId.value),
   );
-
   if (!selectedCharacter) {
     return;
   }
-
   favoritesStore.addFavorite({
     ...selectedCharacter,
     customDescription: newDescription.value || "Personaje del universo Disney.",
   });
-
   selectedCharacterId.value = "";
   newDescription.value = "";
   selectedLetter.value = "";
@@ -161,17 +146,15 @@ const selectSuggestedCharacter = (character) => {
   selectedCharacterId.value = character._id;
   searchCharacter.value = character.name;
 };
+
 const getAllCharacters = async () => {
   try {
     const firstResponse = await fetch(
       "https://api.disneyapi.dev/character?page=1&pageSize=50",
     );
-
     const firstData = await firstResponse.json();
     const totalPages = firstData.info.totalPages;
-
     const requests = [];
-
     for (let page = 1; page <= totalPages; page++) {
       requests.push(
         fetch(
@@ -179,11 +162,8 @@ const getAllCharacters = async () => {
         ).then((response) => response.json()),
       );
     }
-
     const pages = await Promise.all(requests);
-
     const allCharacters = pages.flatMap((page) => page.data);
-
     availableCharacters.value = allCharacters
       .filter((character) => character.imageUrl)
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -193,6 +173,7 @@ const getAllCharacters = async () => {
 };
 
 onMounted(() => {
+  favoritesStore.loadFavorites();
   getAllCharacters();
 });
 </script>
@@ -247,11 +228,32 @@ onMounted(() => {
   }
 }
 
+.favorites-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 900px) {
+  .favorites-page {
+    flex-direction: column;
+  }
+
+  .favorites-page__content {
+    padding: 24px;
+  }
+
+  .favorites-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 .favorites-page__form {
   display: grid;
-  grid-template-columns: 96px 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr 1fr auto;
   gap: 16px;
   align-items: end;
+  position: relative;
 
   label {
     display: flex;
@@ -259,18 +261,10 @@ onMounted(() => {
     gap: 8px;
     color: #cbd5e1;
     font-size: 0.9rem;
-    min-width: 0;
-  }
-
-  label:first-child select {
-    width: 80px;
   }
 
   select,
   input {
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
     background: #253247;
     border: 1px solid #334155;
     border-radius: 8px;
@@ -286,7 +280,6 @@ onMounted(() => {
     padding: 11px 16px;
     font-weight: 700;
     cursor: pointer;
-    white-space: nowrap;
   }
 }
 
@@ -299,91 +292,42 @@ onMounted(() => {
   top: 100%;
   left: 0;
   right: 0;
-  z-index: 20;
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 0;
   background: #253247;
   border: 1px solid #334155;
   border-radius: 8px;
-  overflow: hidden;
+  margin-top: 4px;
+  list-style: none;
+  padding: 4px;
+  z-index: 10;
 
   li {
     padding: 8px 10px;
+    border-radius: 6px;
     cursor: pointer;
-    color: #cbd5e1;
 
     &:hover {
       background: #334155;
-      color: #ffffff;
     }
   }
 }
 
 .favorites-page__empty-message {
-  color: #fca5a5;
-  font-size: 0.85rem;
-  margin: 8px 0 0;
+  margin-top: 12px;
+  color: #f87171;
+  font-size: 0.9rem;
 }
 
-.favorites-page__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-@media (max-width: 1100px) {
-  .favorites-page__form {
-    grid-template-columns: 96px 1fr 1fr;
-  }
-
-  .favorites-page__form button {
-    grid-column: 1 / -1;
-    justify-self: start;
-  }
-
-  .favorites-page__form label:first-child select {
-    width: 100%;
-  }
-
-  .favorites-page__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 900px) {
-  .favorites-page {
-    flex-direction: column;
-  }
-
-  .favorites-page__content {
-    padding: 24px;
-  }
-
+@media (max-width: 600px) {
   .favorites-page__form {
     grid-template-columns: 1fr;
   }
 
-  .favorites-page__form label:first-child select {
-    width: 100%;
-  }
-
   .favorites-page__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 600px) {
-  .favorites-page__content {
-    padding: 20px;
+    grid-template-columns: 1fr;
   }
 
   .favorites-page__header h1 {
     font-size: 2rem;
-  }
-
-  .favorites-page__grid {
-    grid-template-columns: 1fr;
   }
 }
 </style>
