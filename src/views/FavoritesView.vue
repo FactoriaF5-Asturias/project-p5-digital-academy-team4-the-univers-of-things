@@ -46,9 +46,9 @@
           :title="favorite.customTitle"
           :description="favorite.customDescription"
           :image="favorite.imageUrl"
-          :rating="favorite.rating"
+          :rating="favoritesStore.getRating(favorite._id)"
           @delete="favoritesStore.removeFavorite(favorite._id)"
-          @rate="favoritesStore.rateFavorite(favorite._id, $event)"
+          @rate="favoritesStore.rateCharacter(favorite, $event)"
           @edit="
             favoritesStore.updateFavorite(favorite._id, {
               customTitle: $event.title,
@@ -103,6 +103,8 @@ const addFavorite = () => {
 };
 
 onMounted(async () => {
+  favoritesStore.loadFavorites();
+
   const response = await fetch(
     "https://api.disneyapi.dev/character?page=3&pageSize=20",
   );
@@ -111,10 +113,6 @@ onMounted(async () => {
   availableCharacters.value = data.data.filter(
     (character) => character.imageUrl,
   );
-
-  availableCharacters.value.slice(0, 4).forEach((character) => {
-    favoritesStore.addFavorite(character);
-  });
 });
 </script>
 
@@ -174,6 +172,7 @@ onMounted(async () => {
   margin-top: auto;
   padding-top: 48px;
 }
+
 @media (max-width: 900px) {
   .favorites-page {
     flex-direction: column;

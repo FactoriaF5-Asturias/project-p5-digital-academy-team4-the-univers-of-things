@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { authService } from '../services/authService'
+import { useFavoritesStore } from './favoritesStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
@@ -20,9 +21,12 @@ export const useAuthStore = defineStore('auth', {
         // Guardar token para mantener la sesión
         localStorage.setItem('token', result.token)
         localStorage.setItem('user', JSON.stringify(result.user))
+        const favoritesStore = useFavoritesStore()
+favoritesStore.loadFavorites()
         return true
       }
-
+const favoritesStore = useFavoritesStore()
+favoritesStore.favorites = []
       this.user = null
       this.token = null
       this.isAuthenticated = false

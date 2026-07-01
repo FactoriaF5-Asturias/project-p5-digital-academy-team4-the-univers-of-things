@@ -1,7 +1,10 @@
 <script setup>
+import { ref } from 'vue'
 import castilloDisney from '@/assets/img/castillodisney.jpg'
-</script>
+import HeroWeekCharacterModal from './HeroWeekCharacterModal.vue'
 
+const showModal = ref(false)
+</script>
 <template>
   <section class="relative h-125 overflow-hidden rounded-3xl mb-12">
 
@@ -27,10 +30,19 @@ import castilloDisney from '@/assets/img/castillodisney.jpg'
         <p class="text-base md:text-xl text-slate-200">
           Sumérgete en el mundo de los personajes Disney y descubre sus historias, aventuras y universos.
         </p>
+        <button
+  @click="showModal = true"
+  class="mt-8 rounded-lg bg-blue-600 px-6 py-3 font-semibold transition hover:bg-blue-700"
+>
+  ⭐ Personaje de la semana
+</button>
 
       </div>
 
     </div>
-
+<HeroWeekCharacterModal
+  v-if="showModal"
+  @close="showModal = false"
+/>
   </section>
 </template>
