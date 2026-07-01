@@ -12,15 +12,19 @@ export function seedAdminUser() {
       password: ADMIN_PASSWORD,
       role: 'admin',
     })
+
     localStorage.setItem('users', JSON.stringify(users))
   }
 }
+
 seedAdminUser()
+
 export const authService = {
   login(email, password) {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
+
     const foundUser = users.find(
-      (u) => u.email === email && u.password === password
+      (user) => user.email === email && user.password === password,
     )
 
     if (foundUser) {
@@ -28,8 +32,8 @@ export const authService = {
         success: true,
         token: 'fake-user-token',
         user: {
-          email: foundUser.email,
           name: foundUser.name,
+          email: foundUser.email,
           role: foundUser.role,
         },
       }
@@ -44,7 +48,8 @@ export const authService = {
   register(name, email, password) {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
 
-    const existingUser = users.find((u) => u.email === email)
+    const existingUser = users.find((user) => user.email === email)
+
     if (existingUser) {
       return {
         success: false,
@@ -52,7 +57,13 @@ export const authService = {
       }
     }
 
-    const newUser = { name, email, password, role: 'customer' }
+    const newUser = {
+      name,
+      email,
+      password,
+      role: 'customer',
+    }
+
     users.push(newUser)
     localStorage.setItem('users', JSON.stringify(users))
 
@@ -61,9 +72,10 @@ export const authService = {
       message: 'Cuenta creada correctamente.',
     }
   },
-getAdminPublicInfo() {
+
+  getAdminPublicInfo() {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
-    const admin = users.find((u) => u.role === 'admin')
+    const admin = users.find((user) => user.role === 'admin')
 
     if (!admin) return null
 

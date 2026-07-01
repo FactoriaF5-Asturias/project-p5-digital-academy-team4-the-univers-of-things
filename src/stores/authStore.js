@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
 import { authService } from '../services/authService'
-import { useFavoritesStore } from './favoritesStore'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: JSON.parse(localStorage.getItem('user')),
+    user: JSON.parse(localStorage.getItem('user')) || null,
     token: localStorage.getItem('token'),
-    isAuthenticated: !!localStorage.getItem('token')
+    isAuthenticated: !!localStorage.getItem('token'),
   }),
 
   actions: {
@@ -18,15 +17,12 @@ export const useAuthStore = defineStore('auth', {
         this.token = result.token
         this.isAuthenticated = true
 
-        // Guardar token para mantener la sesión
         localStorage.setItem('token', result.token)
         localStorage.setItem('user', JSON.stringify(result.user))
-        const favoritesStore = useFavoritesStore()
-favoritesStore.loadFavorites()
+
         return true
       }
-const favoritesStore = useFavoritesStore()
-favoritesStore.favorites = []
+
       this.user = null
       this.token = null
       this.isAuthenticated = false
@@ -44,18 +40,19 @@ favoritesStore.favorites = []
       localStorage.removeItem('admin')
     },
 
-  initAuth() {
-  const token = localStorage.getItem('token')
+    initAuth() {
+      const token = localStorage.getItem('token')
+      const user = localStorage.getItem('user')
 
-  if (token) {
-    this.token = token
-    this.user = JSON.parse(localStorage.getItem('user'))
-    this.isAuthenticated = true
-  } else {
-    this.user = null
-    this.token = null
-    this.isAuthenticated = false
-  }
-}
-},
+      if (token && user) {
+        this.token = token
+        this.user = JSON.parse(user)
+        this.isAuthenticated = true
+      } else {
+        this.user = null
+        this.token = null
+        this.isAuthenticated = false
+      }
+    },
+  },
 })

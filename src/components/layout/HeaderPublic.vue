@@ -24,14 +24,35 @@
  
       <!-- Login / Register -->
       <div class="flex items-center gap-6">
-        <div class="hidden lg:flex items-center gap-4">
+       <div class="hidden lg:flex items-center gap-4">
   <RouterLink
+    v-if="!authStore.user"
     to="/login"
     class="text-on-surface-variant hover:text-on-surface transition-opacity duration-300 font-label-lg text-label-lg"
     active-class="text-primary font-bold border-b-2 border-primary"
   >
     Login
   </RouterLink>
+  <RouterLink
+    v-else
+    to="/user"
+    class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-opacity duration-300"
+  >
+    <img
+      v-if="userAvatar"
+      :src="userAvatar"
+      alt="Avatar"
+      class="w-8 h-8 rounded-full object-cover"
+    />
+    <span class="font-label-lg text-label-lg">{{ userName }}</span>
+  </RouterLink>
+  <button
+    v-if="authStore.user"
+    @click="handleLogout"
+    class="text-on-surface-variant hover:text-on-surface transition-opacity duration-300 font-label-lg text-label-lg"
+  >
+    Cerrar sesión
+  </button>
 </div>
  
         <!-- Botón menú móvil -->
@@ -69,19 +90,55 @@
           Home
         </RouterLink>
         <RouterLink
+          v-if="!authStore.user"
           to="/login"
           class="text-body-md text-on-surface-variant hover:text-on-surface py-2"
           @click="isMenuOpen = false"
-      >
+        >
           Login
         </RouterLink>
+        <RouterLink
+          v-else
+          to="/user"
+          class="text-body-md text-on-surface-variant hover:text-on-surface py-2"
+          @click="isMenuOpen = false"
+        >
+          {{ userName }}
+        </RouterLink>
+        <button
+          v-if="authStore.user"
+          @click="handleLogout(); isMenuOpen = false"
+          class="text-body-md text-on-surface-variant hover:text-on-surface py-2 text-left"
+        >
+          Cerrar sesión
+        </button>
       </div>
     </transition>
   </header>
 </template>
  
 <script setup>
-import { ref } from 'vue'
- 
+import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
+
 const isMenuOpen = ref(false)
+const authStore = useAuthStore()
+
+const userAvatarValue = ref(localStorage.getItem('userAvatar') || '')
+const userAvatar = computed(() => authStore.user?.avatar || userAvatarValue.value)
+const loadUserAvatar = () => {
+  userAvatarValue.value = localStorage.getItem('userAvatar') || ''
+}
+const userName = computed(() => authStore.user?.name || authStore.user?.email || 'Usuario')
+
+const handleLogout = () => {
+  authStore.logout()
+  isMenuOpen.value = false
+}
+
+onMounted(() => {
+  window.addEventListener('storage', loadUserAvatar)
+  window.addEventListener('avatar-updated', loadUserAvatar)
+})
+
 </script>
