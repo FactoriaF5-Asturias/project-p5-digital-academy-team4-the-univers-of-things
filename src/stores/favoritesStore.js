@@ -1,45 +1,18 @@
-import { defineStore } from 'pinia'
-import { useAuthStore } from './authStore'
+import { defineStore } from "pinia";
 
 const FAVORITES_STORAGE_KEY = "favorites";
 
 export const useFavoritesStore = defineStore("favorites", {
   state: () => ({
-    favorites: [],
-    ratings: []
+    favorites: JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [],
   }),
 
   actions: {
-    getUserKey(type) {
-      const authStore = useAuthStore()
-
-      if (!authStore.user) return null
-
-      return `${type}_${authStore.user.email}`
-    },
-
-    loadFavorites() {
-      const favoritesKey = this.getUserKey('favorites')
-      const ratingsKey = this.getUserKey('ratings')
-
-      if (!favoritesKey || !ratingsKey) {
-        this.favorites = []
-        this.ratings = []
-        return
-      }
-
-      this.favorites = JSON.parse(localStorage.getItem(favoritesKey)) || []
-      this.ratings = JSON.parse(localStorage.getItem(ratingsKey)) || []
-    },
-
     saveFavorites() {
-      const favoritesKey = this.getUserKey('favorites')
-      const ratingsKey = this.getUserKey('ratings')
-
-      if (!favoritesKey || !ratingsKey) return
-
-      localStorage.setItem(favoritesKey, JSON.stringify(this.favorites))
-      localStorage.setItem(ratingsKey, JSON.stringify(this.ratings))
+      localStorage.setItem(
+        FAVORITES_STORAGE_KEY,
+        JSON.stringify(this.favorites),
+      );
     },
 
     addFavorite(item) {
@@ -51,60 +24,36 @@ export const useFavoritesStore = defineStore("favorites", {
         this.favorites.push({
           ...item,
           customTitle: item.name,
-          customDescription: 'Personaje del universo Disney.'
-        })
+          customDescription:
+            item.customDescription || "Personaje del universo Disney.",
+          rating: 0,
+        });
 
-        this.saveFavorites()
+        this.saveFavorites();
       }
     },
 
     removeFavorite(id) {
-      this.favorites = this.favorites.filter((favorite) => favorite._id !== id)
-      this.saveFavorites()
-    },
-
-    isFavorite(id) {
-      return this.favorites.some((favorite) => favorite._id === id)
-    },
-
-    toggleFavorite(item) {
-      if (this.isFavorite(item._id)) {
-        this.removeFavorite(item._id)
-      } else {
-        this.addFavorite(item)
-      }
+      this.favorites = this.favorites.filter((favorite) => favorite._id !== id);
+      this.saveFavorites();
     },
 
     updateFavorite(id, updatedData) {
       const favorite = this.favorites.find((favorite) => favorite._id === id);
 
       if (favorite) {
-        Object.assign(favorite, updatedData)
-        this.saveFavorites()
+        Object.assign(favorite, updatedData);
+        this.saveFavorites();
       }
     },
 
-    rateCharacter(character, rating) {
-      const existingRating = this.ratings.find((item) => item._id === character._id)
+    rateFavorite(id, rating) {
+      const favorite = this.favorites.find((favorite) => favorite._id === id);
 
-      if (existingRating) {
-        existingRating.rating = rating
-      } else {
-        this.ratings.push({
-          _id: character._id,
-          name: character.name,
-          imageUrl: character.imageUrl,
-          rating
-        })
+      if (favorite) {
+        favorite.rating = rating;
+        this.saveFavorites();
       }
-
-      this.saveFavorites()
     },
-
-    getRating(id) {
-      const rating = this.ratings.find((item) => item._id === id)
-
-      return rating?.rating || 0
-    }
-  }
-})
+  },
+});

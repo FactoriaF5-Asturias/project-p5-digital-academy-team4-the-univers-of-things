@@ -154,17 +154,26 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/authStore'
 
 const isMenuOpen = ref(false)
 const authStore = useAuthStore()
 
-const userAvatar = computed(() => authStore.user?.avatar || localStorage.getItem('userAvatar') || '')
+const userAvatarValue = ref(localStorage.getItem('userAvatar') || '')
+const userAvatar = computed(() => authStore.user?.avatar || userAvatarValue.value)
+const loadUserAvatar = () => {
+  userAvatarValue.value = localStorage.getItem('userAvatar') || ''
+}
 const userName = computed(() => authStore.user?.name || authStore.user?.email || 'Usuario')
 
 const handleLogout = () => {
   authStore.logout()
   isMenuOpen.value = false
 }
+
+onMounted(() => {
+  window.addEventListener('storage', loadUserAvatar)
+  window.addEventListener('avatar-updated', loadUserAvatar)
+})
 </script>

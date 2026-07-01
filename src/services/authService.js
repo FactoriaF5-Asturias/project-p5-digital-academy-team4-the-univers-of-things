@@ -12,15 +12,19 @@ export function seedAdminUser() {
       password: ADMIN_PASSWORD,
       role: 'admin',
     })
+
     localStorage.setItem('users', JSON.stringify(users))
   }
 }
+
 seedAdminUser()
+
 export const authService = {
   login(email, password) {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
+
     const foundUser = users.find(
-      (u) => u.email === email && u.password === password
+      (user) => user.email === email && user.password === password,
     )
 
     if (foundUser) {
@@ -28,59 +32,50 @@ export const authService = {
         success: true,
         token: 'fake-user-token',
         user: {
-          email: foundUser.email,
           name: foundUser.name,
+          email: foundUser.email,
           role: foundUser.role,
         },
-      };
-    }
-
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
-    const registeredUser = users.find(
-      (user) => user.email === email && user.password === password,
-    );
-
-    if (registeredUser) {
-      return {
-        success: true,
-        token: "fake-user-token",
-        user: {
-          name: registeredUser.name,
-          email: registeredUser.email,
-          role: "customer",
-        },
-      };
+      }
     }
 
     return {
       success: false,
-      message: "Invalid email or password.",
-    };
+      message: 'Invalid email or password.',
+    }
   },
 
   register(name, email, password) {
-    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
 
-    const existingUser = users.find((u) => u.email === email)
+    const existingUser = users.find((user) => user.email === email)
+
     if (existingUser) {
       return {
         success: false,
-        message: "Este email ya está registrado.",
-      };
+        message: 'Este email ya está registrado.',
+      }
     }
 
-    const newUser = { name, email, password, role: 'customer' }
+    const newUser = {
+      name,
+      email,
+      password,
+      role: 'customer',
+    }
+
     users.push(newUser)
     localStorage.setItem('users', JSON.stringify(users))
 
     return {
       success: true,
-      message: "Cuenta creada correctamente.",
-    };
+      message: 'Cuenta creada correctamente.',
+    }
   },
-getAdminPublicInfo() {
+
+  getAdminPublicInfo() {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
-    const admin = users.find((u) => u.role === 'admin')
+    const admin = users.find((user) => user.role === 'admin')
 
     if (!admin) return null
 

@@ -93,29 +93,8 @@
         </section>
       </main>
 
-      <section class="favorites-page__grid">
-        <FavoriteCard
-          v-for="favorite in favorites"
-          :key="favorite._id"
-          :title="favorite.customTitle"
-          :description="favorite.customDescription"
-          :image="favorite.imageUrl"
-          :rating="favoritesStore.getRating(favorite._id)"
-          @delete="favoritesStore.removeFavorite(favorite._id)"
-          @rate="favoritesStore.rateCharacter(favorite, $event)"
-          @edit="
-            favoritesStore.updateFavorite(favorite._id, {
-              customTitle: $event.title,
-              customDescription: $event.description,
-            })
-          "
-        />
-      </section>
-
-      <div class="favorites-page__footer">
-        <Footer />
-      </div>
-    </main>
+      <Footer />
+    </div>
   </div>
 </template>
 
@@ -178,17 +157,43 @@ const addFavorite = () => {
   searchCharacter.value = "";
 };
 
-onMounted(async () => {
-  favoritesStore.loadFavorites();
+const selectSuggestedCharacter = (character) => {
+  selectedCharacterId.value = character._id;
+  searchCharacter.value = character.name;
+};
+const getAllCharacters = async () => {
+  try {
+    const firstResponse = await fetch(
+      "https://api.disneyapi.dev/character?page=1&pageSize=50",
+    );
 
-  const response = await fetch(
-    "https://api.disneyapi.dev/character?page=3&pageSize=20",
-  );
-  const data = await response.json();
+    const firstData = await firstResponse.json();
+    const totalPages = firstData.info.totalPages;
 
-  availableCharacters.value = data.data.filter(
-    (character) => character.imageUrl,
-  );
+    const requests = [];
+
+    for (let page = 1; page <= totalPages; page++) {
+      requests.push(
+        fetch(
+          `https://api.disneyapi.dev/character?page=${page}&pageSize=50`,
+        ).then((response) => response.json()),
+      );
+    }
+
+    const pages = await Promise.all(requests);
+
+    const allCharacters = pages.flatMap((page) => page.data);
+
+    availableCharacters.value = allCharacters
+      .filter((character) => character.imageUrl)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  } catch (error) {
+    console.error("Error al cargar todos los personajes Disney:", error);
+  }
+};
+
+onMounted(() => {
+  getAllCharacters();
 });
 </script>
 
@@ -239,31 +244,6 @@ onMounted(async () => {
 
   p {
     color: #cbd5e1;
-  }
-}
-
-.favorites-page__grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.favorites-page__footer {
-  margin-top: auto;
-  padding-top: 48px;
-}
-
-@media (max-width: 900px) {
-  .favorites-page {
-    flex-direction: column;
-  }
-
-  .favorites-page__content {
-    padding: 24px;
-  }
-
-  .favorites-page__grid {
-    grid-template-columns: repeat(2, 1fr);
   }
 }
 
