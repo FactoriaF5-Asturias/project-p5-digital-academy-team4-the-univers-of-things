@@ -1,23 +1,36 @@
+const ADMIN_EMAIL = 'admin@cinemagic.com'
+
+export function seedAdminUser() {
+  const users = JSON.parse(localStorage.getItem('users') || '[]')
+  const adminExists = users.some((u) => u.email === ADMIN_EMAIL)
+  const ADMIN_PASSWORD = atob('MTIzNDU2')
+
+  if (!adminExists) {
+    users.push({
+      name: 'Administrator',
+      email: ADMIN_EMAIL,
+      password: ADMIN_PASSWORD,
+      role: 'admin',
+    })
+    localStorage.setItem('users', JSON.stringify(users))
+  }
+}
+seedAdminUser()
 export const authService = {
   login(email, password) {
-    if (email === 'test@test.com' && password === '123456') {
-      return {
-        success: true,
-        token: 'fake-admin-token',
-        user: {
-          email,
-          role: 'admin',
-        },
-      }
-    }
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const foundUser = users.find(
+      (u) => u.email === email && u.password === password
+    )
 
-    if (email === 'user@test.com' && password === '123456') {
+    if (foundUser) {
       return {
         success: true,
-        token: 'fake-customer-token',
+        token: 'fake-user-token',
         user: {
-          email,
-          role: 'customer',
+          email: foundUser.email,
+          name: foundUser.name,
+          role: foundUser.role,
         },
       }
     }
@@ -32,7 +45,6 @@ export const authService = {
     const users = JSON.parse(localStorage.getItem('users') || '[]')
 
     const existingUser = users.find((u) => u.email === email)
-
     if (existingUser) {
       return {
         success: false,
@@ -40,13 +52,25 @@ export const authService = {
       }
     }
 
-    const newUser = { name, email, password }
+    const newUser = { name, email, password, role: 'customer' }
     users.push(newUser)
     localStorage.setItem('users', JSON.stringify(users))
 
     return {
       success: true,
       message: 'Cuenta creada correctamente.',
+    }
+  },
+getAdminPublicInfo() {
+    const users = JSON.parse(localStorage.getItem('users') || '[]')
+    const admin = users.find((u) => u.role === 'admin')
+
+    if (!admin) return null
+
+    return {
+      name: admin.name,
+      email: admin.email,
+      role: admin.role,
     }
   },
 }
