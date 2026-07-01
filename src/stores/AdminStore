@@ -6,7 +6,7 @@ export const useAdminStore = defineStore('admin', {
     users: JSON.parse(localStorage.getItem('users')) || [
       {
         id: 1,
-        name: 'Administrator',
+        name: 'Administrador',
         email: 'test@test.com',
         password: '123456',
         role: 'admin',

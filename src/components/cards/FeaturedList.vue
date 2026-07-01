@@ -50,7 +50,7 @@
         <table class="w-full text-left border-collapse">
           <thead>
             <tr class="bg-surface-container-high border-b glass-stroke">
-              <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Character Name</th>
+              <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Nombre del personaje</th>
               <th class="px-6 py-5"></th>
             </tr>
           </thead>
@@ -79,7 +79,7 @@
               </td>
               <td class="px-6 py-4 text-right space-x-3">
                 <template v-if="editingId === char.id">
-                  <button @click="saveEdit(char.id)" class="text-sm text-green-400 hover:text-green-300">Guardar</button>
+                  <button @click="saveEdit(char.id)" class="text-sm text-white">Guardar</button>
                   <button @click="cancelEdit" class="text-sm text-on-surface-variant hover:text-on-surface">Cancelar</button>
                 </template>
                 <template v-else>

@@ -166,10 +166,7 @@ const filteredCharacters = computed(() => {
 })
 
 const previewAvatar = computed(() =>
-  uploadedAvatar.value ||
-  selectedCharacter.value?.imageUrl ||
-  adminStore.avatar ||
-  `https://i.pravatar.cc/60?u=${authStore.user?.email}`
+  uploadedAvatar.value || selectedCharacter.value?.imageUrl || adminStore.avatar || null
 )
 
 function selectCharacter(character) {

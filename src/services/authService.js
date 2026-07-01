@@ -7,7 +7,7 @@ export const authService = {
         user: {
         email,
         role: 'admin',
-        name: 'Administrator'
+        name: 'Administrador'
       }
       }
     }

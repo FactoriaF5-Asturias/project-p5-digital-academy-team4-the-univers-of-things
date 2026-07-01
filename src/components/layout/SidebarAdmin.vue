@@ -7,7 +7,7 @@
   </div>
 
     <nav class="flex-1 space-y-1">
-      <p class="px-6 pt-4 pb-2 text-xs text-on-surface-variant uppercase tracking-wider">System</p>
+      <p class="px-6 pt-4 pb-2 text-xs text-on-surface-variant uppercase tracking-wider">Sistema</p>
       
       <RouterLink
         to="/"
@@ -15,7 +15,7 @@
         active-class="bg-primary/10 text-primary border-l-4 border-primary"
       >
         <span class="material-symbols-outlined text-[20px]">home</span>
-        <span class="font-label-lg text-label-lg">Home</span>
+        <span class="font-label-lg text-sm font-bold">Inicio</span>
       </RouterLink>
 
 
@@ -25,10 +25,10 @@
         active-class="bg-primary/10 text-primary border-l-4 border-primary"
       >
         <span class="material-symbols-outlined text-[20px]">settings</span>
-        <span class="font-label-lg text-label-lg">Settings</span>
+        <span class="font-label-lg text-sm font-bold">Configuración</span>
       </RouterLink>
 
-      <p class="px-6 pt-6 pb-2 text-xs text-on-surface-variant uppercase tracking-wider">Management</p>
+      <p class="px-6 pt-6 pb-2 text-xs text-on-surface-variant uppercase tracking-wider">Gestión</p>
 
       <RouterLink
         to="/admin/user"
@@ -36,7 +36,7 @@
         active-class="bg-primary/10 text-primary border-l-4 border-primary"
       >
         <span class="material-symbols-outlined text-[20px]">bar_chart</span>
-        <span class="font-label-lg text-label-lg">Dashboard</span>
+        <span class="font-label-lg text-sm font-bold">Tablero</span>
       </RouterLink>
 
       <RouterLink
@@ -45,7 +45,7 @@
         active-class="bg-primary/10 text-primary border-l-4 border-primary"
       >
         <span class="material-symbols-outlined text-[20px]">contacts</span>
-        <span class="font-label-lg text-label-lg">User Directory</span>
+        <span class="font-label-lg text-sm font-bold">Directorio de Usuarios</span>
       </RouterLink>
 
       <RouterLink
@@ -54,7 +54,7 @@
         active-class="bg-primary/10 text-primary border-l-4 border-primary"
       >
         <span class="material-symbols-outlined text-[20px]">thumb_up</span>
-        <span class="font-label-lg text-label-lg">Featured Characters</span>
+        <span class="font-label-lg text-sm font-bold">Personajes Destacados</span>
       </RouterLink>
     </nav>
 
@@ -71,9 +71,9 @@
         </div>
         <div>
           <p class="font-label-lg text-label-lg font-bold text-on-surface">
-            {{ authStore.user?.name || 'Administrator' }}
+            {{ authStore.user?.name || 'Administrador' }}
           </p>
-          <p class="text-xs text-on-surface-variant">Master Manager</p>
+          <p class="text-xs text-on-surface-variant">Administrador principal</p>
         </div>
       </div>
 
@@ -82,7 +82,7 @@
         class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all duration-300"
       >
         <span class="material-symbols-outlined">logout</span>
-        <span class="font-label-lg text-label-lg">Logout</span>   
+        <span class="font-label-lg text-label-lg">Cerrar Sesión</span>   
       </button>
     </div>
   </aside>

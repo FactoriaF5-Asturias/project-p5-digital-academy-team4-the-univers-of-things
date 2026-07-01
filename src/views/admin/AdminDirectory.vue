@@ -1,7 +1,7 @@
 <template>
   <div class="user-directory -mt-10 px-6">
 
-    <h1 class="text-3xl font-bold text-on-surface mb-8">User Directory</h1>
+    <h1 class="text-3xl font-bold text-on-surface mb-8">Directorio de usuarios</h1>
 
     <div class="table-container bg-surface-container border glass-stroke rounded-2xl overflow-hidden shadow-sm">
       <div class="overflow-x-auto">
@@ -9,9 +9,9 @@
           <thead>
             <tr class="bg-surface-container-high border-b glass-stroke">
               <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Avatar</th>
-              <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Full Name</th>
-              <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Email Address</th>
-              <th class="px-6 py-5 font-label-lg text-label-lg text-primary text-center">Security Status</th>
+              <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Nombre completo</th>
+              <th class="px-6 py-5 font-label-lg text-label-lg text-primary">Correo electrónico</th>
+              <th class="px-6 py-5 font-label-lg text-label-lg text-primary text-center">Estado de acceso</th>
             </tr>
           </thead>
           <tbody class="divide-y glass-stroke">
